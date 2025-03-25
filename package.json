@@ -17,6 +17,10 @@
     "categories": [
         "Programming Languages"
     ],
+    "activationEvents": [
+        "onCommand:extension.jumpToInclude"
+    ],
+    "main": "./out/extension.js",
     "contributes": {
         "languages": [
             {
@@ -45,7 +49,22 @@
                 "language": "lsdyna",
                 "path": "./snippets/lsdyna.json"
             }
-        ]
+        ],
+        "commands": [
+            {
+                "command": "extension.jumpToInclude",
+                "title": "Jump to *INCLUDE File"
+            }
+        ],
+        "menus": {
+            "editor/context": [
+                {
+                    "command": "extension.jumpToInclude",
+                    "when": "editorLangId == 'lsdyna'",
+                    "group": "navigation"
+                }
+            ]
+        }
     },
     "release": {
         "branches": "master",
@@ -61,5 +80,12 @@
         "fail": [
             "@semantic-release/github"
         ]
+    },
+    "dependencies": {
+        "typescript": "^5.8.2"
+    },
+    "devDependencies": {
+        "@types/node": "^22.13.11",
+        "@types/vscode": "^1.30.0"
     }
 }
