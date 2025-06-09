@@ -3,7 +3,7 @@ import * as path from 'path';
 import * as fs from 'fs';
 
 export function activate(context: vscode.ExtensionContext) {
-    let disposable = vscode.commands.registerCommand('extension.jumpToInclude', () => {
+    let openIncludeFileDisposable = vscode.commands.registerCommand('extension.openIncludeFile', () => {
         const editor = vscode.window.activeTextEditor;
         if (!editor) {
             return;
@@ -32,7 +32,7 @@ export function activate(context: vscode.ExtensionContext) {
         }
     });
 
-    context.subscriptions.push(disposable);
+    context.subscriptions.push(openIncludeFileDisposable);
 }
 
 /**

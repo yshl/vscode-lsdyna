@@ -18,7 +18,7 @@
         "Programming Languages"
     ],
     "activationEvents": [
-        "onCommand:extension.jumpToInclude"
+        "onCommand:extension.openIncludeFile"
     ],
     "main": "./out/extension.js",
     "contributes": {
@@ -52,14 +52,14 @@
         ],
         "commands": [
             {
-                "command": "extension.jumpToInclude",
-                "title": "Jump to *INCLUDE File"
+                "command": "extension.openIncludeFile",
+                "title": "Open *INCLUDE File"
             }
         ],
         "menus": {
             "editor/context": [
                 {
-                    "command": "extension.jumpToInclude",
+                    "command": "extension.openIncludeFile",
                     "when": "editorLangId == 'lsdyna'",
                     "group": "navigation"
                 }
