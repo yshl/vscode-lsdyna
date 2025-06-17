@@ -32,7 +32,34 @@ export function activate(context: vscode.ExtensionContext) {
         }
     });
 
+    let selectKeywordDisposable = vscode.commands.registerCommand('extension.selectKeyword', () => {
+        const editor = vscode.window.activeTextEditor;
+        if (!editor) {
+            return;
+        }
+
+        const document = editor.document;
+        const lines = document.getText().split('\n');
+        const currentLineIndex = editor.selection.active.line;
+
+        try {
+            const startLine = startLineOfCurrentKeyword(lines, currentLineIndex);
+            const endLine = endLineOfCurrentKeyword(lines, currentLineIndex);
+
+            const startPosition = new vscode.Position(startLine, 0);
+            const endPosition = new vscode.Position(endLine + 1, 0);
+            editor.selection = new vscode.Selection(startPosition, endPosition);
+        } catch (error) {
+            if (error instanceof Error) {
+                vscode.window.showErrorMessage(`${error.message}`);
+            } else {
+                throw error;
+            }
+        }
+    });
+
     context.subscriptions.push(openIncludeFileDisposable);
+    context.subscriptions.push(selectKeywordDisposable);
 }
 
 /**
@@ -107,6 +134,21 @@ function startLineOfCurrentKeyword(lines: string[], lineindex: number) {
         }
     }
     throw new Error('not on any keyword.');
+}
+
+/**
+ * Finds the ending line of the current keyword by searching downwards
+ * @param lines Array of document lines
+ * @param lineindex Current line index
+ * @returns Line index where the current keyword ends
+ */
+function endLineOfCurrentKeyword(lines: string[], lineindex: number) {
+    for(let i=lineindex+1; i<lines.length; i++){
+        if (lines[i].startsWith("*")){
+            return i-1;
+        }
+    }
+    return lines.length-1;
 }
 
 /**

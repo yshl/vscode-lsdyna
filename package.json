@@ -18,7 +18,8 @@
         "Programming Languages"
     ],
     "activationEvents": [
-        "onCommand:extension.openIncludeFile"
+        "onCommand:extension.openIncludeFile",
+        "onCommand:extension.selectKeyword"
     ],
     "main": "./out/extension.js",
     "contributes": {
@@ -54,6 +55,10 @@
             {
                 "command": "extension.openIncludeFile",
                 "title": "Open *INCLUDE File"
+            },
+            {
+                "command": "extension.selectKeyword",
+                "title": "Select Current Keyword"
             }
         ],
         "menus": {
@@ -62,6 +67,11 @@
                     "command": "extension.openIncludeFile",
                     "when": "editorLangId == 'lsdyna'",
                     "group": "navigation"
+                },
+                {
+                    "command": "extension.selectKeyword",
+                    "when": "editorLangId == 'lsdyna'",
+                    "group": "9_cutcopypaste"
                 }
             ]
         }
