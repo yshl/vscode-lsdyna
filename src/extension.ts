@@ -58,8 +58,60 @@ export function activate(context: vscode.ExtensionContext) {
         }
     });
 
+    let jumpToNextKeywordDisposable = vscode.commands.registerCommand('extension.jumpToNextKeyword', () => {
+        const editor = vscode.window.activeTextEditor;
+        if (!editor) {
+            return;
+        }
+
+        const document = editor.document;
+        const lines = document.getText().split('\n');
+        const currentLineIndex = editor.selection.active.line;
+
+        try {
+            const nextLine = findNextKeyword(lines, currentLineIndex);
+
+            const position = new vscode.Position(nextLine, 0);
+            editor.selection = new vscode.Selection(position, position);
+            editor.revealRange(new vscode.Range(position, position), vscode.TextEditorRevealType.InCenter);
+        } catch (error) {
+            if (error instanceof Error) {
+                vscode.window.showErrorMessage(`${error.message}`);
+            } else {
+                throw error;
+            }
+        }
+    });
+
+    let jumpToPreviousKeywordDisposable = vscode.commands.registerCommand('extension.jumpToPreviousKeyword', () => {
+        const editor = vscode.window.activeTextEditor;
+        if (!editor) {
+            return;
+        }
+
+        const document = editor.document;
+        const lines = document.getText().split('\n');
+        const currentLineIndex = editor.selection.active.line;
+
+        try {
+            const prevLine = findPreviousKeyword(lines, currentLineIndex);
+
+            const position = new vscode.Position(prevLine, 0);
+            editor.selection = new vscode.Selection(position, position);
+            editor.revealRange(new vscode.Range(position, position), vscode.TextEditorRevealType.InCenter);
+        } catch (error) {
+            if (error instanceof Error) {
+                vscode.window.showErrorMessage(`${error.message}`);
+            } else {
+                throw error;
+            }
+        }
+    });
+
     context.subscriptions.push(openIncludeFileDisposable);
     context.subscriptions.push(selectKeywordDisposable);
+    context.subscriptions.push(jumpToNextKeywordDisposable);
+    context.subscriptions.push(jumpToPreviousKeywordDisposable);
 }
 
 /**
@@ -210,6 +262,36 @@ function searchFileFromPaths(filePath: string, paths: string[]) {
         }
     }
     throw new Error(`${filePath} not found`);
+}
+
+/**
+ * Finds the next keyword line by searching downwards
+ * @param lines Array of document lines
+ * @param currentLine Current line index
+ * @returns Line index of the next keyword
+ */
+function findNextKeyword(lines: string[], currentLine: number) {
+    for(let i=currentLine+1; i<lines.length; i++){
+        if (lines[i].startsWith("*")){
+            return i;
+        }
+    }
+    throw new Error('No more keywords found.');
+}
+
+/**
+ * Finds the previous keyword line by searching upwards
+ * @param lines Array of document lines
+ * @param currentLine Current line index
+ * @returns Line index of the previous keyword
+ */
+function findPreviousKeyword(lines: string[], currentLine: number) {
+    for(let i=currentLine-1; i>=0; i--){
+        if (lines[i].startsWith("*")){
+            return i;
+        }
+    }
+    throw new Error('No previous keywords found.');
 }
 
 export function deactivate() {}

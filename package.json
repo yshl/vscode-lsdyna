@@ -19,7 +19,9 @@
     ],
     "activationEvents": [
         "onCommand:extension.openIncludeFile",
-        "onCommand:extension.selectKeyword"
+        "onCommand:extension.selectKeyword",
+        "onCommand:extension.jumpToNextKeyword",
+        "onCommand:extension.jumpToPreviousKeyword"
     ],
     "main": "./out/extension.js",
     "contributes": {
@@ -59,6 +61,28 @@
             {
                 "command": "extension.selectKeyword",
                 "title": "Select Current Keyword"
+            },
+            {
+                "command": "extension.jumpToNextKeyword",
+                "title": "Jump to Next Keyword",
+                "icon": "$(arrow-down)"
+            },
+            {
+                "command": "extension.jumpToPreviousKeyword",
+                "title": "Jump to Previous Keyword",
+                "icon": "$(arrow-up)"
+            }
+        ],
+        "keybindings": [
+            {
+                "command": "extension.jumpToNextKeyword",
+                "key": "ctrl+alt+down",
+                "when": "editorLangId == 'lsdyna'"
+            },
+            {
+                "command": "extension.jumpToPreviousKeyword",
+                "key": "ctrl+alt+up",
+                "when": "editorLangId == 'lsdyna'"
             }
         ],
         "menus": {
@@ -72,6 +96,18 @@
                     "command": "extension.selectKeyword",
                     "when": "editorLangId == 'lsdyna'",
                     "group": "9_cutcopypaste"
+                }
+            ],
+            "editor/title": [
+                {
+                    "command": "extension.jumpToNextKeyword",
+                    "when": "editorLangId == 'lsdyna'",
+                    "group": "navigation"
+                },
+                {
+                    "command": "extension.jumpToPreviousKeyword",
+                    "when": "editorLangId == 'lsdyna'",
+                    "group": "navigation"
                 }
             ]
         }
