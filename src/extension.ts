@@ -112,6 +112,12 @@ export function activate(context: vscode.ExtensionContext) {
     context.subscriptions.push(selectKeywordDisposable);
     context.subscriptions.push(jumpToNextKeywordDisposable);
     context.subscriptions.push(jumpToPreviousKeywordDisposable);
+    context.subscriptions.push(
+        vscode.languages.registerDocumentSymbolProvider(
+            { language: 'lsdyna' },
+            new LsdynaKeywordSymbolProvider()
+        )
+    );
 }
 
 /**
@@ -292,6 +298,35 @@ function findPreviousKeyword(lines: string[], currentLine: number) {
         }
     }
     throw new Error('No previous keywords found.');
+}
+
+/**
+ * Provides document symbols for LS-DYNA keywords
+ * @implements DocumentSymbolProvider
+ */
+class LsdynaKeywordSymbolProvider implements vscode.DocumentSymbolProvider {
+    provideDocumentSymbols(
+        document: vscode.TextDocument,
+        token: vscode.CancellationToken
+    ): vscode.ProviderResult<vscode.DocumentSymbol[]> {
+        const symbols: vscode.DocumentSymbol[] = [];
+        for (let i = 0; i < document.lineCount; i++) {
+            const line = document.lineAt(i);
+            if (line.text.startsWith('*')) {
+                const name = line.text.trim();
+                symbols.push(
+                    new vscode.DocumentSymbol(
+                        name,
+                        '',
+                        vscode.SymbolKind.Property,
+                        line.range,
+                        line.range
+                    )
+                );
+            }
+        }
+        return symbols;
+    }
 }
 
 export function deactivate() {}
