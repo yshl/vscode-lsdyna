@@ -38,6 +38,17 @@
                     ".dyna"
                 ],
                 "configuration": "./language-configuration.json"
+            },
+            {
+                "id": "lsprepost-command-file",
+                "aliases": [
+                    "LS-PrePost Command File",
+                    "LS-PrePost cfile"
+                ],
+                "extensions": [
+                    ".cfile"
+                ],
+                "configuration": "./language-configuration-lspp-cfile.json"
             }
         ],
         "grammars": [
@@ -45,6 +56,11 @@
                 "language": "lsdyna",
                 "scopeName": "source.lsdyna",
                 "path": "./syntaxes/lsdyna.tmLanguage.json"
+            },
+            {
+                "language": "lsprepost-command-file",
+                "scopeName": "source.lsprepost-command-file",
+                "path": "./syntaxes/lspp-cfile.tmLanguage.json"
             }
         ],
         "snippets": [
